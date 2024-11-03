@@ -1,0 +1,41 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import os
+
+
+csv_data=pd.read_csv("sales data.csv")
+excel_data=pd.read_excel("Sales data.xlsx")
+json_data=pd.read_json("sales data.json")
+
+csv_data.head()
+json_data.head()
+excel_data.head()
+
+def merge(dataframes):
+    if dataframes:
+        return pd.concat(dataframes)
+
+df=merge([csv_data,excel_data,json_data])
+df.reset_index(inplace=True)
+
+df.head()
+
+df.describe()
+
+df.info()
+
+df.dtypes
+
+df.isna().sum()
+
+df.duplicated().sum()
+
+df.boxplot()
+
+sns.pairplot(df)
+
+plt.show()
+
+df.isna().sum()

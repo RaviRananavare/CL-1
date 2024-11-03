@@ -1,0 +1,38 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.metrics import r2_score, accuracy_score
+import warnings
+warnings.filterwarnings("ignore")
+
+
+# Load the diabetes dataset
+data = pd.read_csv("diabetes.csv")
+data.describe()
+
+
+
+data.skew() 
+
+data.kurt()
+
+data.mode().iloc[0]
+
+X = data.drop('Outcome', axis=1)
+y = data['Outcome']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+linear_reg = LinearRegression()
+linear_reg.fit(X_train, y_train)
+y_pred_linear = linear_reg.predict(X_test)
+r2_linear = r2_score(y_test, y_pred_linear)
+print(f"Linear Regression R-squared: {r2_linear}")
+
+# Bivariate analysis - Logistic regression
+logistic_reg = LogisticRegression()
+logistic_reg.fit(X_train, y_train)
+y_pred_logistic = logistic_reg.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred_logistic)
+print(f"Logistic Regression Accuracy: {accuracy}")

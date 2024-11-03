@@ -1,0 +1,64 @@
+import warnings
+warnings.filterwarnings('ignore')
+
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression,LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+
+
+data = pd.read_csv('Iris.csv')
+data.head()
+
+
+
+
+data.isnull().sum()
+
+
+
+
+# Seperating dependent and Independent Features
+X = data.iloc[:,:-1]
+y = data['Class Label']
+
+
+
+# Split the data for train test split
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+
+
+# Standardize the data
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+# APply LDA
+lda = LinearDiscriminantAnalysis(n_components = 2)
+X_train = lda.fit_transform(X_train,y_train)
+X_test = lda.transform(X_test)
+
+
+
+# Classification model
+logistic = LogisticRegression()
+logistic.fit(X_train,y_train)
+
+
+
+y_pred = logistic.predict(X_test)
+
+
+
+
+# Metrics
+print("Accuracy:",accuracy_score(y_test,y_pred))
+print("\nReport:",classification_report(y_test,y_pred))
+print("\nConfusion Matrix:",confusion_matrix(y_test,y_pred))

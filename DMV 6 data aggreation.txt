@@ -1,0 +1,53 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+
+
+
+df = pd.read_csv("retail_sales_data.csv", parse_dates=['invoice_date'])
+df.head()
+
+
+df.describe()
+
+df.info()
+
+
+df.isna().sum()
+
+df.isnull().sum()
+
+
+df.drop(["invoice_no", "customer_id", "gender", "age", "payment_method"], axis=1, inplace=True)
+df.head()
+
+
+df['Sales'] = df['quantity']*df['price']
+df.head() 
+
+
+# Group data by region and calculate total sales amount
+region_sales = df.groupby("shopping_mall")["Sales"].sum()
+region_sales.plot(kind="bar")
+plt.title("Sales Distribution by Region")
+plt.xlabel("Region")
+plt.ylabel("Total Sales Amount")
+plt.show()
+
+
+
+print(f"The top-performing region is: {region_sales.idxmax()}")
+
+
+
+region_category_sales = df.groupby(["shopping_mall", "category"])["Sales"].sum().unstack()
+
+region_category_sales.plot(kind="bar", stacked=True)
+plt.title("Sales Comparison by Region and Product Category")
+plt.xlabel("Region")
+plt.ylabel("Total Sales Amount")
+plt.legend(title="Product Category")
+plt.show()
